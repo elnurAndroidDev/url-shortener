@@ -21,10 +21,9 @@ func (h *Handler) ShortenURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	r.ParseForm()
-	longURL := r.FormValue("url")
-	if longURL == "" {
-		http.Error(w, "missing 'url' parameter", http.StatusBadRequest)
+	longURL, err := validateURL(r.FormValue("url"))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
