@@ -13,8 +13,11 @@ func validateURL(rawURL string) (string, error) {
 	if len(trimmedURL) > maxURLLength {
 		return "", errors.New("url is too long")
 	}
-	u, err := url.ParseRequestURI(trimmedURL)
+	u, err := url.Parse(trimmedURL)
 	if err != nil {
+		return "", errors.New("url must be absolute, like https://example.com")
+	}
+	if u.Scheme == "" {
 		return "", errors.New("url must be absolute, like https://example.com")
 	}
 	if u.Scheme != "http" && u.Scheme != "https" {
